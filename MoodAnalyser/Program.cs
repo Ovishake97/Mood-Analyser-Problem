@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 
 namespace MoodAnalyser
@@ -48,13 +50,39 @@ namespace MoodAnalyser
         public enum ExceptionType
         {
             EMPTY_MESSAGE,
-            NULL_MESSAGE
+            NULL_MESSAGE,
+            NO_SUCH_CLASS,
+            NO_SUCH_CONSTRUCTOR
         }
         public readonly ExceptionType type;
 
         public MoodAnalyserCustomExceptions(ExceptionType type, string message) : base(message)
         {
             this.type = type;
+        }
+    }
+
+    public class MoodAnalyserFactory {
+
+        public static object CreateMoodAnalyserParameterizedObject(string className, string constructor, string message)
+        {
+            Type type = typeof(MoodAnalyse);
+
+            if (type.Name.Equals(className) || type.FullName.Equals(className))
+            {
+                if (type.Name.Equals(constructor))
+                {
+                    ConstructorInfo construt = type.GetConstructor(new[] { typeof(string) });
+                    Object obj = construt.Invoke(new object[] { message });
+                    return obj;
+                }
+                else
+                    throw new MoodAnalyserCustomExceptions(MoodAnalyserCustomExceptions.ExceptionType.NO_SUCH_CONSTRUCTOR, "constructor not found");
+            }
+            else
+            {
+                throw new MoodAnalyserCustomExceptions(MoodAnalyserCustomExceptions.ExceptionType.NO_SUCH_CLASS, "class not found");
+            }
         }
     }
 }
