@@ -69,5 +69,12 @@ namespace MSTestofMoods
                 Assert.AreEqual("Message should not be empty", execption.Message);
             }
         }
+        [TestMethod]
+        public void GivenMoodAnalyseClassReturnMoodAnalyseObject_ParameterizedConstructor()
+        {
+            var obj = new MoodAnalyse("happy");
+            object result = MoodAnalyserFactory.CreateMoodAnalyserParameterizedObject("MoodAnalyser.MoodAnalyse", "MoodAnalyse", "happy");
+            obj.Equals(result);
+        }
     }
 }
