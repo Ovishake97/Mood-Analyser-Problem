@@ -9,7 +9,7 @@ namespace MoodAnalyser
             Console.WriteLine("Hey! How's your mood today?");
             string message = Console.ReadLine();
             MoodAnalyse moodAnalyser = new MoodAnalyse(message);
-            Console.WriteLine($"Looks like you are " +moodAnalyser.analyseMood());
+           Console.WriteLine($"Looks like you are " +moodAnalyser.AnalyseMood());
         }
     }
 
@@ -18,14 +18,25 @@ namespace MoodAnalyser
         public MoodAnalyse(string message) {
             this.message = message;
         }
-        public string analyseMood() {
-            if (message.ToLower().Contains("sad"))
+        public string AnalyseMood() {
+            try
             {
-                return "sad";
+                if (message.ToLower().Contains("sad"))
+                {
+                    return "sad";
+                }
+                else
+                {
+                   return "happy";
+                }
+
             }
-            else {
+            catch (NullReferenceException e) {
                 return "happy";
+
+
             }
+           
         }
     }
 }

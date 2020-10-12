@@ -20,7 +20,7 @@ namespace MSTestofMoods
         public void TestCase1()
         {
             //Act 
-            string actual = analyse.analyseMood();
+            string actual = analyse.AnalyseMood();
             //Assert
             Assert.AreEqual("sad", actual);
         }
@@ -28,8 +28,13 @@ namespace MSTestofMoods
             //Arrange
             analyse = new MoodAnalyser.MoodAnalyse("happy");
             //Act
-            string actual = analyse.analyseMood();
+            string actual = analyse.AnalyseMood();
             //Assert
+            Assert.AreEqual("happy", actual);
+        }
+        public void GivenNullShowingHappy() {
+            analyse = new MoodAnalyser.MoodAnalyse(" ");
+            string actual = analyse.AnalyseMood();
             Assert.AreEqual("happy", actual);
         }
     }
