@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 
 namespace MoodAnalyser
 {
@@ -21,6 +23,9 @@ namespace MoodAnalyser
         public string AnalyseMood() {
             try
             {
+                if (this.message.Equals(string.Empty)) {
+                    throw new MoodAnalyserCustomExceptions(MoodAnalyserCustomExceptions.ExceptionType.EMPTY_MESSAGE, "Message should not be empty");
+                }
                 if (message.ToLower().Contains("sad"))
                 {
                     return "sad";
@@ -31,12 +36,25 @@ namespace MoodAnalyser
                 }
 
             }
-            catch (NullReferenceException e) {
-                return "happy";
-
+            catch (NullReferenceException) {
+                throw new MoodAnalyserCustomExceptions(MoodAnalyserCustomExceptions.ExceptionType.NULL_MESSAGE, "Mood should not be null");
 
             }
-           
+        }
+    }
+
+    public class MoodAnalyserCustomExceptions :Exception {
+
+        public enum ExceptionType
+        {
+            EMPTY_MESSAGE,
+            NULL_MESSAGE
+        }
+        public readonly ExceptionType type;
+
+        public MoodAnalyserCustomExceptions(ExceptionType type, string message) : base(message)
+        {
+            this.type = type;
         }
     }
 }
