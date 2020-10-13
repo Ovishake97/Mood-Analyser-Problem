@@ -131,5 +131,24 @@ namespace MSTestofMoods
             }
         }
 
+        [TestMethod]
+        public void GivenHappyShouldInvokeHappy()
+        {
+            string expected = "happy";
+            string actual = MoodAnalyser.MoodAnalyserFactory.InvokeAnalyserMethod("happy", "AnalyseMood");
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void GivenImproperMethodNameShouldReturnCustomException() {
+            string expected = "happy";
+            try {
+                string actual = MoodAnalyser.MoodAnalyserFactory.InvokeAnalyserMethod(expected, "MoodAnalyse");
+            }
+            catch (MoodAnalyserCustomExceptions exceptions) {
+                Assert.AreEqual("Method not present", exceptions.Message);
+                
+            }
+        }
     }
 }
