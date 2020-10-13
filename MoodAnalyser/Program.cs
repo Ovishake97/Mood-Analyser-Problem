@@ -14,13 +14,20 @@ namespace MoodAnalyser
             string message = Console.ReadLine();
             MoodAnalyse moodAnalyser = new MoodAnalyse(message);
            Console.WriteLine($"Looks like you are " +moodAnalyser.AnalyseMood());
+            MoodAnalyserFactory.CreateMoodAnalyserParameterizedObject("MoodAnalyser.MoodAnalyse", "MoodAnalyse", "happy");
+            MoodAnalyserFactory.CreateMoodAnalyserDefaultConstructor("MoodAnalyser.MoodAnalyse", "MoodAnalyse");
         }
     }
 
     public class MoodAnalyse {
         public string message;
         public MoodAnalyse(string message) {
+            Console.WriteLine("Parameterized Constructor");
             this.message = message;
+        }
+
+        public MoodAnalyse() {
+            Console.WriteLine("Default Constructor");
         }
         public string AnalyseMood() {
             try
@@ -52,7 +59,9 @@ namespace MoodAnalyser
             EMPTY_MESSAGE,
             NULL_MESSAGE,
             NO_SUCH_CLASS,
-            NO_SUCH_CONSTRUCTOR
+            NO_SUCH_CONSTRUCTOR,
+            NO_SUCH_METHOD
+
         }
         public readonly ExceptionType type;
 
@@ -64,13 +73,33 @@ namespace MoodAnalyser
 
     public class MoodAnalyserFactory {
 
+        public static object CreateMoodAnalyserDefaultConstructor(string className, string constructor) {
+            Type type = typeof(MoodAnalyse);
+            if (type.Name.Equals(className) || type.FullName.Equals(className))
+            {
+                if (type.Name.Equals(constructor))
+                {
+                    Assembly assembly = Assembly.GetExecutingAssembly();
+                    Type moodAnalyse = assembly.GetType(className);
+                    return Activator.CreateInstance(moodAnalyse);
+                }
+                else
+                {
+                    throw new MoodAnalyserCustomExceptions(MoodAnalyserCustomExceptions.ExceptionType.NO_SUCH_CONSTRUCTOR, "Constructor not present");
+                }
+            }
+            else {
+                throw new MoodAnalyserCustomExceptions(MoodAnalyserCustomExceptions.ExceptionType.NO_SUCH_CLASS, "Class is not present");
+            }
+        }
+
         public static object CreateMoodAnalyserParameterizedObject(string className, string constructor, string message)
         {
             Type type = typeof(MoodAnalyse);
 
             if (type.Name.Equals(className) || type.FullName.Equals(className))
             {
-                if (type.Name.Equals(constructor))
+                if (type.Name.Equals(constructor)) 
                 {
                     ConstructorInfo construt = type.GetConstructor(new[] { typeof(string) });
                     Object obj = construt.Invoke(new object[] { message });
@@ -84,5 +113,6 @@ namespace MoodAnalyser
                 throw new MoodAnalyserCustomExceptions(MoodAnalyserCustomExceptions.ExceptionType.NO_SUCH_CLASS, "class not found");
             }
         }
+        
     }
 }
