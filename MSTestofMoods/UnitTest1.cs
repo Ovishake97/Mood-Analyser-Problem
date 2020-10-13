@@ -70,11 +70,66 @@ namespace MSTestofMoods
             }
         }
         [TestMethod]
+        public void GivenMoodAnalyserClassReturnMoodAnalyserObject_DefaultConstructor() {
+
+            object expected = new MoodAnalyse();
+            object actual = MoodAnalyserFactory.CreateMoodAnalyserDefaultConstructor("MoodAnalyser.MoodAnalyse", "MoodAnalyse");
+            expected.Equals(actual); 
+        }
+        [TestMethod]
+        public void GivenWrongClassReturnCustomException_DefaultConstructor() {
+            try
+            {
+                object actual = MoodAnalyserFactory.CreateMoodAnalyserDefaultConstructor("MoodAnalyser.MoodAnalyser", "MoodAnalyse");
+            }
+            catch (MoodAnalyserCustomExceptions exceptions) {
+                Assert.AreEqual("Class is not present", exceptions.Message);
+            }
+        }
+        [TestMethod]
+        public void GivenWrongConstructorReturnCustomException_DefaultConstructor()
+        {
+            try
+            {
+                object actual = MoodAnalyserFactory.CreateMoodAnalyserDefaultConstructor("MoodAnalyser.MoodAnalyse", "Mood");
+            }
+            catch (MoodAnalyserCustomExceptions exceptions)
+            {
+                Assert.AreEqual("Constructor not present", exceptions.Message);
+            }
+        }
+
+        [TestMethod]
         public void GivenMoodAnalyseClassReturnMoodAnalyseObject_ParameterizedConstructor()
         {
             var obj = new MoodAnalyse("happy");
             object result = MoodAnalyserFactory.CreateMoodAnalyserParameterizedObject("MoodAnalyser.MoodAnalyse", "MoodAnalyse", "happy");
             obj.Equals(result);
         }
+        [TestMethod]
+        public void GivenWrongClassReturnCustomException_ParameterizedConstructor()
+        {
+            try
+            {
+                object actual = MoodAnalyserFactory.CreateMoodAnalyserParameterizedObject("MoodAnalyser.MoodAnalyser", "MoodAnalyse","happy");
+            }
+            catch (MoodAnalyserCustomExceptions exceptions)
+            {
+                Assert.AreEqual("class not found", exceptions.Message);
+            }
+        }
+        [TestMethod]
+        public void GivenWrongConstructorReturnCustomException_ParameterizedConstructor()
+        {
+            try
+            {
+                object actual = MoodAnalyserFactory.CreateMoodAnalyserParameterizedObject("MoodAnalyser.MoodAnalyse", "Mood", "happy");
+            }
+            catch (MoodAnalyserCustomExceptions exceptions)
+            {
+                Assert.AreEqual("constructor not found", exceptions.Message);
+            }
+        }
+
     }
 }
