@@ -113,6 +113,21 @@ namespace MoodAnalyser
                 throw new MoodAnalyserCustomExceptions(MoodAnalyserCustomExceptions.ExceptionType.NO_SUCH_CLASS, "class not found");
             }
         }
-        
+        public static string InvokeAnalyserMethod(string message, string methodName)
+        {
+            try
+            {
+                Type type = Type.GetType("MoodAnalyser.MoodAnalyse");
+                MethodInfo methodInfo = type.GetMethod(methodName);
+                object method = CreateMoodAnalyserParameterizedObject("MoodAnalyser.MoodAnalyse", "MoodAnalyse", "Happy");
+                object info = methodInfo.Invoke(method, null);
+                return info.ToString();
+            }
+            catch (NullReferenceException)
+            {
+                throw new MoodAnalyserCustomExceptions(MoodAnalyserCustomExceptions.ExceptionType.NO_SUCH_METHOD, "Method not present");
+            }
+        }
+
     }
 }
