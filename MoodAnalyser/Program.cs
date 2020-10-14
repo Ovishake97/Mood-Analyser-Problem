@@ -16,16 +16,18 @@ namespace MoodAnalyser
            Console.WriteLine($"Looks like you are " +moodAnalyser.AnalyseMood());
             MoodAnalyserFactory.CreateMoodAnalyserParameterizedObject("MoodAnalyser.MoodAnalyse", "MoodAnalyse", "happy");
             MoodAnalyserFactory.CreateMoodAnalyserDefaultConstructor("MoodAnalyser.MoodAnalyse", "MoodAnalyse");
+           Console.WriteLine(MoodAnalyserFactory.SetField("Happy", "message"));
         }
     }
-
+    
     public class MoodAnalyse {
         public string message;
+        //Parameterised constructor of the class
         public MoodAnalyse(string message) {
             Console.WriteLine("Parameterized Constructor");
             this.message = message;
         }
-
+        //Default constructor of the class
         public MoodAnalyse() {
             Console.WriteLine("Default Constructor");
         }
@@ -52,6 +54,8 @@ namespace MoodAnalyser
         }
     }
 
+    //Declaring custom exceptions
+
     public class MoodAnalyserCustomExceptions :Exception {
 
         public enum ExceptionType
@@ -60,7 +64,8 @@ namespace MoodAnalyser
             NULL_MESSAGE,
             NO_SUCH_CLASS,
             NO_SUCH_CONSTRUCTOR,
-            NO_SUCH_METHOD
+            NO_SUCH_METHOD,
+            NO_SUCH_FIELD
 
         }
         public readonly ExceptionType type;
@@ -71,6 +76,8 @@ namespace MoodAnalyser
         }
     }
 
+
+    //Implementating Reflection
     public class MoodAnalyserFactory {
 
         public static object CreateMoodAnalyserDefaultConstructor(string className, string constructor) {
@@ -129,5 +136,22 @@ namespace MoodAnalyser
             }
         }
 
+        public static string SetField(string message, string fieldName) {
+            try {
+                if (message == null) {
+                    throw new MoodAnalyserCustomExceptions(MoodAnalyserCustomExceptions.ExceptionType.EMPTY_MESSAGE, "No message found");
+                }
+                MoodAnalyse moodAnalyse = new MoodAnalyse();
+                Type type = typeof(MoodAnalyse);
+                FieldInfo fieldInfo = type.GetField(fieldName, BindingFlags.Public|BindingFlags.Instance);
+                fieldInfo.SetValue(moodAnalyse,message);
+                return moodAnalyse.message;
+
+            }
+            catch (NullReferenceException) {
+                throw new MoodAnalyserCustomExceptions(MoodAnalyserCustomExceptions.ExceptionType.NO_SUCH_FIELD, "Field not found");
+
+            }
+        }
     }
 }
